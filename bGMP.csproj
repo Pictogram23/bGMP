@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <Configuration>Release</Configuration>
+        <OutputType>WinExe</OutputType>
+        <DisableWinExeOutputInference>false</DisableWinExeOutputInference>
+        <TargetFramework>net472</TargetFramework>
+        <Nullable>disable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <PublishSingleFile>false</PublishSingleFile>
+        <SelfContained>false</SelfContained>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+        <PublishDir>./publish</PublishDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="ini-parser"
+                          Version="*" />
+        <PackageReference Include="NAudio"
+                          Version="*" />
+        <PackageReference Include="NAudio.Vorbis"
+                          Version="*" />
+        <PackageReference Include="SoundTouch.Net.NAudioSupport.Core"
+                          Version="*" />
+        <PackageReference Include="Costura.Fody"
+                          Version="*" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="./resources/*.*" />
+    </ItemGroup>
+</Project>
