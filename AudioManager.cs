@@ -193,7 +193,7 @@ namespace bGMP
 
             //var Resource = new ResXResourceSet(RESX_FILE_PATH);
             //System.IO.Stream resource = null;
-            string resource = "bGMP.resources." + name + "." + format;
+            string resource = "bGMP.resources." + name;
             Stream stream = assembly.GetManifestResourceStream(resource);
             if (stream == null)
             {
@@ -202,31 +202,21 @@ namespace bGMP
             switch (format)
             {
                 case "wav":
-
-                    //resource = Resource.ResourceManager.GetStream(name);
-                    //byte[] wavBuffer = (byte[])Resource.GetObject(name);
-                    //var wavStream = new MemoryStream(wavBuffer);
                     var wavStream = assembly.GetManifestResourceStream(resource);
                     var wave = new WaveFileReader(stream);
                     waveChannel = new WaveChannel32(wave) { PadWithZeroes = false };
                     break;
                 case "mp3":
-                    //byte[] mp3Buffer = (byte[])Resource.GetObject(name);
-                    //var mp3Stream = new MemoryStream(mp3Buffer);
                     var mp3Stream = assembly.GetManifestResourceStream(resource);
                     var mp3 = new Mp3FileReader(stream);
                     waveChannel = new WaveChannel32(mp3) { PadWithZeroes = false };
                     break;
                 case "ogg":
-                    //byte[] vorbisBuffer = (byte[])Resource.GetObject(name);
-                    //var vorbisStream = new MemoryStream(vorbisBuffer);
                     var vorbisStream = assembly.GetManifestResourceStream(resource);
                     var vorbis = new VorbisWaveReader(stream);
                     waveChannel = new WaveChannel32(vorbis) { PadWithZeroes = false };
                     break;
                 case "aiff":
-                    //byte[] aiffBuffer = (byte[])Resource.GetObject(name);
-                    //var aiffStream = new MemoryStream(aiffBuffer);
                     var aiffStream = assembly.GetManifestResourceStream(resource);
                     var aiff = new AiffFileReader(stream);
                     waveChannel = new WaveChannel32(aiff) { PadWithZeroes = false };

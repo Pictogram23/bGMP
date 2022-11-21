@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.IO;
 using static bGMP.GlobalParams;
 
 namespace bGMP
@@ -17,6 +18,11 @@ namespace bGMP
                 Environment.Exit(0);
             }
 
+            using (
+                FileStream fileStream = File.Create(BGMP_INI))
+            {
+                fileStream.Close();
+            }
 
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.

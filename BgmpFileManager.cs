@@ -32,32 +32,10 @@ namespace bGMP
         ///     Manage bgmp File, from bgmp File's infomation
         /// </summary>
 
-        FileSystemWatcher watcher1/*, watcher2*/;
+        FileSystemWatcher watcher1;
 
         public BgmpFileManager()
         {
-            /*string section = SECTION_GLOBAL;
-            var parser = new FileIniDataParser();*/
-            while (true)
-            {
-                try
-                {
-                    if (isFileLocked(BGMP_INI) == false)
-                    {
-                        var parser = new FileIniDataParser();
-                        IniData resData = new IniData();
-                        resData.Sections.AddSection(SECTION_GLOBAL);
-                        resData[SECTION_GLOBAL].AddKey(HAS_CALLED, "1");
-                        parser.WriteFile(BGMP_TMP_INI, resData);
-                        break;
-                    }
-                }
-                catch
-                {
-                    Thread.Sleep(500);
-                }
-            }
-
             watcher1 = new FileSystemWatcher();
             watcher1.Path = @"./";
             watcher1.Filter = BGMP_INI;
@@ -65,19 +43,11 @@ namespace bGMP
             watcher1.Changed += on_changed_bgmpini;
             watcher1.Deleted += on_deleted_bgmpini;
             watcher1.EnableRaisingEvents = true;
-
-            /*
-            watcher2 = new FileSystemWatcher();
-            watcher2.Path = @".\";
-            watcher2.Filter = BGMP_TMP_INI;
-            watcher2.Created += on_created_bgmpini;
-            watcher2.EnableRaisingEvents = true;*/
         }
 
         public void bgmp_delete()
         {
             File.Delete(BGMP_INI);
-            //File.Delete(BGMP_TMP_INI);
         }
 
         public void on_created_bgmpini(object source, FileSystemEventArgs e)
@@ -125,27 +95,25 @@ namespace bGMP
 
                         if (id[i] != "")
                         {
-                            string[] splited = musicId.Split('_');
-                            if (splited.Length >= 2)
-                            {
-                                title = splited[0] + "_" + splited[1];
-                                format = splited[1];
+                            title = musicId;
+                            string ext = Path.GetExtension(musicId);
+                            format = ext.Replace(".", "");
 
-                                if (format != "")
-                                {
-                                    _audioManager[i] = new AudioManager();
-                                    _audioManager[i]._myIndex = i;
-                                    _audioManager[i].audioLoad(title, format);
-                                    _audioManager[i].audioSetLoop(int.Parse(data[section][KEY_ISLOOP]));
-                                    _audioManager[i].audioSetVolume(float.Parse(data[section][KEY_VOLUME]));
-                                    _audioManager[i].audioSetPitch(int.Parse(data[section][KEY_PITCH]));
-                                    _audioManager[i].audioSetTempo(int.Parse(data[section][KEY_TEMPO]));
-                                    _audioManager[i].audioSetRate(int.Parse(data[section][KEY_RATE]));
-                                    _audioManager[i].audioSetPan(int.Parse(data[section][KEY_PAN]));
-                                    //_audioManager[i].audioSetPotision(long.Parse(data[section][KEY_POSITION]));
-                                    _audioManager[i].audioSetPotision(DEF_POSITION);
-                                }
+                            if (title != "" && format != "")
+                            {
+                                _audioManager[i] = new AudioManager();
+                                _audioManager[i]._myIndex = i;
+                                _audioManager[i].audioLoad(title, format);
+                                _audioManager[i].audioSetLoop(int.Parse(data[section][KEY_ISLOOP]));
+                                _audioManager[i].audioSetVolume(float.Parse(data[section][KEY_VOLUME]));
+                                _audioManager[i].audioSetPitch(int.Parse(data[section][KEY_PITCH]));
+                                _audioManager[i].audioSetTempo(int.Parse(data[section][KEY_TEMPO]));
+                                _audioManager[i].audioSetRate(int.Parse(data[section][KEY_RATE]));
+                                _audioManager[i].audioSetPan(int.Parse(data[section][KEY_PAN]));
+                                //_audioManager[i].audioSetPotision(long.Parse(data[section][KEY_POSITION]));
+                                _audioManager[i].audioSetPotision(DEF_POSITION);
                             }
+
                         }
                         else
                         {
@@ -231,29 +199,6 @@ namespace bGMP
             {
                 return;
             }
-        }
-
-        private List<string> readFileText(string filepath)
-        {
-            List<string> text = new List<string>();
-            try
-            {
-                using (StreamReader reader = new StreamReader(filepath))
-                {
-                    while (reader.Peek() >= 0)
-                    {
-                        text.Add(reader.ReadLine());
-                    }
-                    reader.Close();
-                }
-            }
-            catch //(IOException ex)
-            {
-                //Console.WriteLine(ex.Message);
-                System.Threading.Thread.Sleep(10);
-                return readFileText(filepath);
-            }
-            return text;
         }
 
         bool isFileLocked(string filename)
